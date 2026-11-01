@@ -65,7 +65,7 @@ class CameraViewModel : ViewModel() {
                 withContext(Dispatchers.IO) {
                     r.connectAndDiscover()
                     val info = r.deviceInfo()
-                    deviceName = info.optString("productname", info.optString("modelid", "Canon camera"))
+                    deviceName = info.optString("productname", info.optString("modelid", "Камера Canon"))
                 }
                 client = c
                 repo = r
@@ -96,7 +96,7 @@ class CameraViewModel : ViewModel() {
                 liveViewRunning = true
                 liveViewJob = viewModelScope.launch(Dispatchers.IO) {
                     r.liveViewFrames()
-                        .catch { e -> errorMessage = "Live view stopped: ${e.message}" }
+                        .catch { e -> errorMessage = "Live view остановлен: ${e.message}" }
                         .collect { bmp -> frame = bmp }
                 }
             } catch (e: Exception) {
@@ -116,9 +116,9 @@ class CameraViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 withContext(Dispatchers.IO) { r.capturePhoto() }
-                lastCaptureMessage = "Shutter triggered"
+                lastCaptureMessage = "Затвор сработал"
             } catch (e: Exception) {
-                lastCaptureMessage = "Capture failed: ${e.message}"
+                lastCaptureMessage = "Ошибка съёмки: ${e.message}"
             }
         }
     }
@@ -133,7 +133,7 @@ class CameraViewModel : ViewModel() {
             try {
                 r.manualShutter(action)
             } catch (e: Exception) {
-                lastCaptureMessage = "Shutter($action) failed: ${e.message}"
+                lastCaptureMessage = "Ошибка затвора ($action): ${e.message}"
             }
         }
     }
@@ -160,19 +160,19 @@ class CameraViewModel : ViewModel() {
                 r.putSettingValue(path, value)
                 onOk(value)
             } catch (e: Exception) {
-                lastCaptureMessage = "Set failed: ${e.message}"
+                lastCaptureMessage = "Не удалось применить значение: ${e.message}"
             }
         }
     }
 
     /** For the debug screen: fire an arbitrary GET against the camera and return the raw text. */
     fun rawGet(path: String, onResult: (String) -> Unit) {
-        val c = client ?: run { onResult("Not connected"); return }
+        val c = client ?: run { onResult("Нет подключения"); return }
         viewModelScope.launch(Dispatchers.IO) {
             val text = try {
                 c.get(path).use { resp -> "HTTP ${resp.code}\n\n" + (resp.body?.string() ?: "") }
             } catch (e: Exception) {
-                "Error: ${e.message}"
+                "Ошибка: ${e.message}"
             }
             withContext(Dispatchers.Main) { onResult(text) }
         }

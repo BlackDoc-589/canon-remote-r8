@@ -60,27 +60,27 @@ fun ConnectScreen(vm: CameraViewModel) {
     ) {
         Text("Canon Remote", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
         Text(
-            "Connects directly to your EOS R8 over Wi-Fi via Canon's CCAPI. " +
-                "No Canon ID or internet connection is used.",
+            "Подключается напрямую к вашей EOS R8 по Wi-Fi через CCAPI Canon. " +
+                "Canon ID и интернет-соединение не используются.",
             style = MaterialTheme.typography.bodyMedium
         )
 
         Spacer(Modifier.height(8.dp))
-        Text("1. On the camera: Menu → Communication functions → Camera Control API → On, " +
-            "set up a username/password under User authentic., then Connect → Add with wizard.", style = MaterialTheme.typography.bodySmall)
-        Text("2. On this phone: join the camera's Wi-Fi network (or the shared access point), " +
-            "in Android Wi-Fi settings.", style = MaterialTheme.typography.bodySmall)
-        Text("3. The camera's screen shows its IP address and port — enter them below.", style = MaterialTheme.typography.bodySmall)
+        Text("1. На камере: Меню → Функции связи → Camera Control API → Вкл., " +
+            "задайте логин/пароль в разделе «Проверка польз.», затем Подключение → Добавить с помощью мастера.", style = MaterialTheme.typography.bodySmall)
+        Text("2. На телефоне: подключитесь к Wi-Fi камеры (или к общей точке доступа) " +
+            "в настройках Wi-Fi Android.", style = MaterialTheme.typography.bodySmall)
+        Text("3. На экране камеры появится её IP-адрес и порт — введите их ниже.", style = MaterialTheme.typography.bodySmall)
 
         Spacer(Modifier.height(8.dp))
-        OutlinedTextField(value = host, onValueChange = { host = it }, label = { Text("Camera IP address") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = port, onValueChange = { port = it }, label = { Text("Port") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = host, onValueChange = { host = it }, label = { Text("IP-адрес камеры") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = port, onValueChange = { port = it }, label = { Text("Порт") }, modifier = Modifier.fillMaxWidth())
         Row(verticalAlignment = Alignment.CenterVertically) {
             Checkbox(checked = useHttps, onCheckedChange = { useHttps = it })
-            Text("Use HTTPS (camera's self-signed cert is trusted automatically)")
+            Text("Использовать HTTPS (самоподписанный сертификат камеры доверяется автоматически)")
         }
-        OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text("Username (if auth enabled on camera)") }, modifier = Modifier.fillMaxWidth())
-        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Password") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = username, onValueChange = { username = it }, label = { Text("Имя пользователя (если на камере включена проверка)") }, modifier = Modifier.fillMaxWidth())
+        OutlinedTextField(value = password, onValueChange = { password = it }, label = { Text("Пароль") }, modifier = Modifier.fillMaxWidth())
 
         Spacer(Modifier.height(8.dp))
         Button(
@@ -88,11 +88,11 @@ fun ConnectScreen(vm: CameraViewModel) {
             enabled = vm.connState != ConnState.CONNECTING,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(if (vm.connState == ConnState.CONNECTING) "Connecting…" else "Connect")
+            Text(if (vm.connState == ConnState.CONNECTING) "Подключение…" else "Подключиться")
         }
 
         vm.errorMessage?.let {
-            Text("Error: $it", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
+            Text("Ошибка: $it", color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
         }
     }
 }
@@ -103,9 +103,9 @@ fun CameraScreen(vm: CameraViewModel) {
     Column(Modifier.fillMaxSize()) {
         TopAppBar(vm)
         TabRow(selectedTabIndex = tab) {
-            Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text("Shoot") })
-            Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text("Settings") })
-            Tab(selected = tab == 2, onClick = { tab = 2 }, text = { Text("Debug") })
+            Tab(selected = tab == 0, onClick = { tab = 0 }, text = { Text("Съёмка") })
+            Tab(selected = tab == 1, onClick = { tab = 1 }, text = { Text("Настройки") })
+            Tab(selected = tab == 2, onClick = { tab = 2 }, text = { Text("Отладка") })
         }
         when (tab) {
             0 -> ShootTab(vm)
@@ -123,10 +123,10 @@ fun TopAppBar(vm: CameraViewModel) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column {
-            Text(vm.deviceName ?: "Camera", fontWeight = FontWeight.Bold)
+            Text(vm.deviceName ?: "Камера", fontWeight = FontWeight.Bold)
             Text(vm.apiVersion ?: "", style = MaterialTheme.typography.bodySmall)
         }
-        TextButton(onClick = { vm.disconnect() }) { Text("Disconnect") }
+        TextButton(onClick = { vm.disconnect() }) { Text("Отключиться") }
     }
 }
 
@@ -149,7 +149,7 @@ fun ShootTab(vm: CameraViewModel) {
                 Image(bitmap = bmp.asImageBitmap(), contentDescription = "Live view", modifier = Modifier.fillMaxSize())
             } else {
                 Text(
-                    if (vm.liveViewRunning) "Waiting for frames…" else "Live view off",
+                    if (vm.liveViewRunning) "Ожидание кадров…" else "Live view выключен",
                     color = androidx.compose.ui.graphics.Color.White
                 )
             }
@@ -157,9 +157,9 @@ fun ShootTab(vm: CameraViewModel) {
 
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
             Button(onClick = { if (vm.liveViewRunning) vm.stopLiveView() else vm.startLiveView() }) {
-                Text(if (vm.liveViewRunning) "Stop live view" else "Start live view")
+                Text(if (vm.liveViewRunning) "Остановить live view" else "Запустить live view")
             }
-            Button(onClick = { vm.refreshSettings() }) { Text("Refresh settings") }
+            Button(onClick = { vm.refreshSettings() }) { Text("Обновить настройки") }
         }
 
         Button(
@@ -167,12 +167,12 @@ fun ShootTab(vm: CameraViewModel) {
             modifier = Modifier.size(84.dp),
             shape = androidx.compose.foundation.shape.CircleShape,
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
-        ) { Text("Shoot") }
+        ) { Text("Снять") }
 
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(onClick = { vm.halfPressShutter() }) { Text("Half-press (AF)") }
-            OutlinedButton(onClick = { vm.pressShutter() }) { Text("Full press") }
-            OutlinedButton(onClick = { vm.releaseShutter() }) { Text("Release") }
+            OutlinedButton(onClick = { vm.halfPressShutter() }) { Text("Полунажатие (АФ)") }
+            OutlinedButton(onClick = { vm.pressShutter() }) { Text("Полное нажатие") }
+            OutlinedButton(onClick = { vm.releaseShutter() }) { Text("Отпустить") }
         }
 
         vm.lastCaptureMessage?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
@@ -183,12 +183,12 @@ fun ShootTab(vm: CameraViewModel) {
 fun SettingsTab(vm: CameraViewModel) {
     Column(Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         SettingRow("ISO", vm.iso) { vm.pushIso(it) }
-        SettingRow("Aperture (Av)", vm.av) { vm.pushAv(it) }
-        SettingRow("Shutter speed (Tv)", vm.tv) { vm.pushTv(it) }
-        SettingRow("Exposure comp.", vm.ec) { vm.pushEc(it) }
+        SettingRow("Диафрагма (Av)", vm.av) { vm.pushAv(it) }
+        SettingRow("Выдержка (Tv)", vm.tv) { vm.pushTv(it) }
+        SettingRow("Экспокоррекция", vm.ec) { vm.pushEc(it) }
         Text(
-            "Values are the raw strings CCAPI uses on your camera (e.g. ISO \"400\", Av \"5.6\", Tv \"1/125\"). " +
-                "Check the Debug tab → GET shooting/settings/iso (etc.) to see the exact allowed values list for your firmware.",
+            "Значения — это «сырые» строки, которые CCAPI использует на вашей камере (например, ISO «400», Av «5.6», Tv «1/125»). " +
+                "Проверьте во вкладке «Отладка» → GET shooting/settings/iso (и т.д.), чтобы увидеть точный список допустимых значений для вашей прошивки.",
             style = MaterialTheme.typography.bodySmall
         )
     }
@@ -201,7 +201,7 @@ fun SettingRow(label: String, current: String?, onSet: (String) -> Unit) {
         Text(label, fontWeight = FontWeight.Bold)
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedTextField(value = value, onValueChange = { value = it }, modifier = Modifier.weight(1f), singleLine = true)
-            Button(onClick = { onSet(value) }) { Text("Set") }
+            Button(onClick = { onSet(value) }) { Text("Применить") }
         }
     }
 }
@@ -211,8 +211,8 @@ fun DebugTab(vm: CameraViewModel) {
     var path by remember { mutableStateOf("/ccapi/") }
     var result by remember { mutableStateOf("") }
     Column(Modifier.fillMaxSize().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Send a raw GET request to inspect what your camera's CCAPI actually exposes.", style = MaterialTheme.typography.bodySmall)
-        OutlinedTextField(value = path, onValueChange = { path = it }, label = { Text("Path") }, modifier = Modifier.fillMaxWidth())
+        Text("Отправьте произвольный GET-запрос, чтобы посмотреть, что именно отдаёт CCAPI вашей камеры.", style = MaterialTheme.typography.bodySmall)
+        OutlinedTextField(value = path, onValueChange = { path = it }, label = { Text("Путь") }, modifier = Modifier.fillMaxWidth())
         Button(onClick = { vm.rawGet(path) { result = it } }) { Text("GET") }
         Divider()
         Text(result, modifier = Modifier.verticalScroll(rememberScrollState()).weight(1f), style = MaterialTheme.typography.bodySmall)
