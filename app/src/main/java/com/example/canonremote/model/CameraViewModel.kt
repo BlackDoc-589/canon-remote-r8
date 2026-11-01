@@ -148,10 +148,10 @@ class CameraViewModel : ViewModel() {
         }
     }
 
-    fun setIso(value: String) = setSetting(CameraRepository.apiPaths.SETTING_ISO, value) { iso = it }
-    fun setAv(value: String) = setSetting(CameraRepository.apiPaths.SETTING_AV, value) { av = it }
-    fun setTv(value: String) = setSetting(CameraRepository.apiPaths.SETTING_TV, value) { tv = it }
-    fun setEc(value: String) = setSetting(CameraRepository.apiPaths.SETTING_EC, value) { ec = it }
+    fun pushIso(value: String) = setSetting(CameraRepository.apiPaths.SETTING_ISO, value) { iso = it }
+    fun pushAv(value: String) = setSetting(CameraRepository.apiPaths.SETTING_AV, value) { av = it }
+    fun pushTv(value: String) = setSetting(CameraRepository.apiPaths.SETTING_TV, value) { tv = it }
+    fun pushEc(value: String) = setSetting(CameraRepository.apiPaths.SETTING_EC, value) { ec = it }
 
     private fun setSetting(path: String, value: String, onOk: (String) -> Unit) {
         val r = repo ?: return

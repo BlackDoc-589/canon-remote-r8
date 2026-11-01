@@ -182,10 +182,10 @@ fun ShootTab(vm: CameraViewModel) {
 @Composable
 fun SettingsTab(vm: CameraViewModel) {
     Column(Modifier.fillMaxSize().padding(16.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        SettingRow("ISO", vm.iso) { vm.setIso(it) }
-        SettingRow("Aperture (Av)", vm.av) { vm.setAv(it) }
-        SettingRow("Shutter speed (Tv)", vm.tv) { vm.setTv(it) }
-        SettingRow("Exposure comp.", vm.ec) { vm.setEc(it) }
+        SettingRow("ISO", vm.iso) { vm.pushIso(it) }
+        SettingRow("Aperture (Av)", vm.av) { vm.pushAv(it) }
+        SettingRow("Shutter speed (Tv)", vm.tv) { vm.pushTv(it) }
+        SettingRow("Exposure comp.", vm.ec) { vm.pushEc(it) }
         Text(
             "Values are the raw strings CCAPI uses on your camera (e.g. ISO \"400\", Av \"5.6\", Tv \"1/125\"). " +
                 "Check the Debug tab → GET shooting/settings/iso (etc.) to see the exact allowed values list for your firmware.",
